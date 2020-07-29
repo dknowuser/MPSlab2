@@ -1,0 +1,51 @@
+LAB2-4                                                                                                        PAGE 1
+
+                       1    $MOD52                          
+                       2    
+                       3    ;x1 - P0.0
+                       4    ;x2 - P0.1
+                       5    ;x3 - P0.2
+                       6    ;x4 - P0.3
+                       7    
+                       8    ;f = 0 - P1 = 000h
+                       9    ;f = 1 - P1 = 0FFh
+                      10    
+  0020                11    ARGS EQU 20h
+                      12    
+----                  13    CSEG
+0000                  14    ORG 00h
+                      15            ;Считываем аргументы из порта P0 в РПД
+0000 E580             16            mov A, P0
+0002 7820             17            mov R0, #ARGS
+0004 F6               18            mov @R0, A
+                      19            
+0005 A201             20            mov C, ARGS.1; Младший бит регистра A содержит x1
+0007 92F0             21            mov B.0, C; Младший бит регистра B содержит x2
+0009 65F0             22            xrl A, B; Младший бит регистра A содержит (x1 xor x2)
+                      23            
+000B A203             24            mov C, ARGS.3
+000D A002             25            orl C, /ARGS.2; Бит переноса содержит (not x3 or x4)
+                      26            
+000F F6               27            mov @R0, A; x1 = (x1 xor x2)
+0010 8200             28            anl C, ARGS.0
+0012 4006             29            jc one
+0014 759000           30            mov P1, #00h
+0017 02001D           31            jmp lp
+                      32            
+001A                  33    one:
+001A 7590FF           34            mov P1, #0FFh
+                      35            
+001D                  36    lp:
+001D 80FE             37            jmp lp
+                      38    
+                      39    END
+
+VERSION 1.2h ASSEMBLY COMPLETE, 0 ERRORS FOUND
+LAB2-4                                                                                                        PAGE 2
+
+ARGS . . . . . . . . . . . . . .    NUMB  0020H  
+B. . . . . . . . . . . . . . . .  D ADDR  00F0H  PREDEFINED  
+LP . . . . . . . . . . . . . . .  C ADDR  001DH  
+ONE. . . . . . . . . . . . . . .  C ADDR  001AH  
+P0 . . . . . . . . . . . . . . .  D ADDR  0080H  PREDEFINED  
+P1 . . . . . . . . . . . . . . .  D ADDR  0090H  PREDEFINED  
